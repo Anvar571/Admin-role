@@ -1,7 +1,3 @@
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
 ## Installation
 
 ```bash
@@ -43,3 +39,6 @@ $ docker build --no-cache -t nest-api:<your version> .
 # run container
 $ docker compose up -d
 ```
+
+## Simple project CI/CD Docker continer
+Inventory system
