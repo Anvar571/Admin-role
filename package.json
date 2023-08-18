@@ -6,17 +6,17 @@
   "engines": {
     "node": ">18.10.0"
   },
-  "homepage": "https://github.com/mrrashidov/nest-api-starter#readme",
+  "homepage": "git@github.com:Anvar571/Admin-role#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mrrashidov/nest-api-starter.git"
+    "url": "git@github.com:Anvar571/Admin-role.git"
   },
   "bugs": {
-    "url": "https://github.com/mrrashidov/nest-api-starter/issues",
-    "email": "mrrashidov@hotmail.com"
+    "url": "git@github.com:Anvar571/Admin-role.git/issues",
+    "email": "abdurashidovanvar52@gmail.com"
   },
   "license": "MIT",
-  "author": "Shoxrux Rashidov <mrrashidov@hotmail.com> (https://t.me/mrrashidov)",
+  "author": "Anvar A abdurashidovanvar52@gmail.com (https://t.me/AnvarAbdurashidov)",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
