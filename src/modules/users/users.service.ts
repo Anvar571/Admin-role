@@ -1,26 +1,59 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { IUserCreateInterface, IUserUpdateInterface } from './interface/user.interface';
+import { InjectKnex, Knex } from 'nestjs-knex';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(
+    @InjectKnex() private readonly knex: Knex,
+  ) {}
+
+  // ok
+  async findAll(): Promise<IUserCreateInterface[]> {
+    return await this.knex('users').returning('*');
   }
 
-  findAll() {
-    return `This action returns all users`;
+  // ok 
+  async findOne(id: number) {
+    const { password, ...result } = await this.findUser(id);
+
+    return result
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  // ok
+  async update(id: number, { password, ...data }: IUserUpdateInterface) {
+    const result = await Promise.all([
+      this.knex('users').where('id', id).select('*').first(),
+      this.knex('users')
+        .where({ email: data.email })
+        .whereNot('id', id)
+        .first(),
+    ])
+
+    console.log(result);
+    
+    // if (!updateUser) throw new BadRequestException('This is not found user!');
+
+    // return updateUser;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  // ok
+  async remove(id: number): Promise<string> {
+    const user = await this.findUser(id);
+
+    return await this.knex('users').where('id', user.id).del();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async findUser(id: number): Promise<IUserCreateInterface> {
+    if (id) {
+      const findUser = await this.knex('users').where('id', id).first();
+      
+      if (!findUser) throw new BadRequestException('This is id exists or not found!');
+
+      return findUser;
+    }
+
+    throw new BadRequestException('Id is not found or id is not exsits');
+
   }
 }
