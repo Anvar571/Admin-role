@@ -48,7 +48,10 @@ export class UsersService {
 
   async findUser(id: number): Promise<IUserCreateInterface> {
     if (id) {
-      const findUser = await this.knex('users').where('id', id).select('-password').first();
+      const findUser = await this.knex('users')
+        .where('id', id)
+        .select('-password')
+        .first();
 
       if (!findUser)
         throw new BadRequestException('This is id exists or not found!');
