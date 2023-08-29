@@ -21,7 +21,7 @@ export class UsersService {
   }
 
   // ok
-  async update(id: number, { password, ...data }: IUserUpdateInterface) {
+  async update(id: number, { password, ...data }: IUserUpdateInterface): Promise<Omit<IUserCreateInterface, 'password'>> {
     const result = await Promise.all([
       this.knex('users').where('id', id).select('*').first(),
       this.knex('users')
@@ -30,11 +30,9 @@ export class UsersService {
         .first(),
     ])
 
-    console.log(result);
-    
-    // if (!updateUser) throw new BadRequestException('This is not found user!');
+    if (!result) throw new BadRequestException('This is not found user!');
 
-    // return updateUser;
+    return await this.knex('users').where('id', id).update(data);
   }
 
   // ok
