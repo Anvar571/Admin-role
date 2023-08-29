@@ -6,6 +6,6 @@ import { AppController } from './app.controller';
 
 @Module({
   imports: [AuthModule, SharedModule, UsersModule],
-  controllers: [AppController]
+  controllers: [AppController],
 })
 export class AppModule {}

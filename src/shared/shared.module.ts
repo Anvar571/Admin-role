@@ -18,7 +18,6 @@ import { PassportModule } from '@nestjs/passport';
     KnexModule.forRootAsync({
       useClass: KnexOptions,
     }),
-
-  ]
+  ],
 })
 export class SharedModule {}

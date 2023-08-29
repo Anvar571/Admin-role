@@ -9,9 +9,13 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [UsersService,{
-        provide: getKnexConnectionToken(''), useValue: {}
-      }],
+      providers: [
+        UsersService,
+        {
+          provide: getKnexConnectionToken(''),
+          useValue: {},
+        },
+      ],
     }).compile();
 
     controller = module.get<UsersController>(UsersController);

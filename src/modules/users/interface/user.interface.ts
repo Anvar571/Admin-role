@@ -9,4 +9,4 @@ export interface IUserCreateInterface {
   created_at: Date;
 }
 
-export interface IUserUpdateInterface extends IUserCreateInterface {}
+export type IUserUpdateInterface = IUserCreateInterface;

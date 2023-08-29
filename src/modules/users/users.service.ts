@@ -1,34 +1,38 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { IUserCreateInterface, IUserUpdateInterface } from './interface/user.interface';
+import {
+  IUserCreateInterface,
+  IUserUpdateInterface,
+} from './interface/user.interface';
 import { InjectKnex, Knex } from 'nestjs-knex';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectKnex() private readonly knex: Knex,
-  ) {}
+  constructor(@InjectKnex() private readonly knex: Knex) {}
 
   // ok
   async findAll(): Promise<IUserCreateInterface[]> {
     return await this.knex('users').returning('*');
   }
 
-  // ok 
+  // ok
   async findOne(id: number) {
-    const { password, ...result } = await this.findUser(id);
+    const result = await this.findUser(id);
 
-    return result
+    return result;
   }
 
   // ok
-  async update(id: number, { password, ...data }: IUserUpdateInterface): Promise<Omit<IUserCreateInterface, 'password'>> {
+  async update(
+    id: number,
+    data: Omit<IUserUpdateInterface, 'password'>,
+  ): Promise<Omit<IUserCreateInterface, 'password'>> {
     const result = await Promise.all([
       this.knex('users').where('id', id).select('*').first(),
       this.knex('users')
         .where({ email: data.email })
         .whereNot('id', id)
         .first(),
-    ])
+    ]);
 
     if (!result) throw new BadRequestException('This is not found user!');
 
@@ -44,14 +48,14 @@ export class UsersService {
 
   async findUser(id: number): Promise<IUserCreateInterface> {
     if (id) {
-      const findUser = await this.knex('users').where('id', id).first();
-      
-      if (!findUser) throw new BadRequestException('This is id exists or not found!');
+      const findUser = await this.knex('users').where('id', id).select('-password').first();
+
+      if (!findUser)
+        throw new BadRequestException('This is id exists or not found!');
 
       return findUser;
     }
 
     throw new BadRequestException('Id is not found or id is not exsits');
-
   }
 }
