@@ -1,17 +1,18 @@
 import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
-  return knex.schema.createTable('users', function (table) {
+  return knex.schema.createTable('accounts', function (table) {
     table.increments('id').primary();
     table.string('avatar', 100).nullable();
     table.string('lang', 4).defaultTo('uz');
     table.string('phone').nullable();
-    table.string('email').notNullable();
+    table.string('email').nullable();
     table.string('password').notNullable();
     table.string('username').notNullable();
     table.string('about').nullable();
     table.string('token').nullable();
     table.date('birthday').nullable();
+    table.enum('type', ['system', 'user', 'moderator'])
     table
       .enum('status', ['active', 'passive', 'pending', 'block', 'deleted'])
       .defaultTo('pending');
@@ -20,5 +21,5 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  return knex.schema.dropTable('users');
+  return knex.schema.dropTable('accounts');
 }

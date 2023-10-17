@@ -4,15 +4,12 @@ import {
   ValidationPipe,
   VersioningType,
 } from '@nestjs/common';
-import { WsAdapter } from '@nestjs/platform-ws';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import { corsOptions } from './shared/options/cors.options';
 import * as compression from 'compression';
 
 function setUpApp(app: INestApplication) {
   app.use(cookieParser());
-  app.useWebSocketAdapter(new WsAdapter(app));
   app.use(compression());
   app.use(
     helmet({
@@ -35,7 +32,6 @@ function setUpApp(app: INestApplication) {
     type: VersioningType.URI,
     defaultVersion: '1',
   });
-  app.enableCors(corsOptions);
 }
 
 export default setUpApp;
