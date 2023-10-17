@@ -5,25 +5,22 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AccountService {
-  constructor(
-    private readonly accountRepository: AccountRepository
-  ) {}
+  constructor(private readonly accountRepository: AccountRepository) {}
 
   async createAccount(login: string, dto: CreateAccountDto) {
-    const exaptionEmail: RegExp =
-      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const exaptionEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
-    const exaptionPhone: RegExp = /^\d+$/i;
+    const exaptionPhone = /^\d+$/i;
 
     if (exaptionEmail.test(login)) {
       dto['email'] = login;
     } else if (exaptionPhone.test(login)) {
-      dto['phone'] = login
+      dto['phone'] = login;
     } else {
       throw new UnprocessableEntityException('Email or phone exists');
     }
 
-    const {password, ...data} = dto;
+    const { password, ...data } = dto;
     const hashPass = await bcrypt.hash(password, 10);
 
     return this.accountRepository.createAccountAndPassword(hashPass, data);
@@ -32,7 +29,7 @@ export class AccountService {
   createAccountWithRole() {}
 
   findAllAccount(account_id: number) {
-    return this.accountRepository.findOneAllAccount(account_id)
+    return this.accountRepository.findOneAllAccount(account_id);
   }
 
   findAllAcounts(ids: number[]) {

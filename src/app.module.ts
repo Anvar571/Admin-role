@@ -5,12 +5,7 @@ import { AccountModule } from './modules/account/account.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 
 @Module({
-  imports: [
-    SharedModule,
-    AuthModule, 
-    AccountModule, 
-    PermissionsModule
-  ],
+  imports: [SharedModule, AuthModule, AccountModule, PermissionsModule],
   controllers: [],
 })
 export class AppModule {}

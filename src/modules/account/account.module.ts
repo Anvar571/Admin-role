@@ -6,10 +6,6 @@ import { PasswordRepository } from './repository/password.repository';
 
 @Module({
   controllers: [AccountController],
-  providers: [
-    AccountService,
-    AccountRepository,
-    PasswordRepository
-  ]
+  providers: [AccountService, AccountRepository, PasswordRepository],
 })
 export class AccountModule {}

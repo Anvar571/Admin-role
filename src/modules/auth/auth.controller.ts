@@ -6,9 +6,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('auth/sign-up')
-  signup() {
-
-  }
+  signup() {}
 
   @Post('auth/sign-in')
   signin() {}
@@ -17,7 +15,5 @@ export class AuthController {
   verification() {}
 
   @Post('auth/logout')
-  logout() {
-
-  }
+  logout() {}
 }
