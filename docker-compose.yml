@@ -1,0 +1,23 @@
+version: '3.7'
+name: role-api
+services:
+  postgres:
+    container_name: rolebase
+    env_file: .env
+    image: postgres
+    ports:
+      - "127.0.0.1:5440:5432"
+    volumes:
+      - postgres:/data/postgres
+    environment:
+      - POSTGRES_DB: ${DB_NAME:-password}
+      - POSTGRES_USER: ${DB_USER:-password}
+      - POSTGRES_PASSWORD: ${DB_PASSWROD:-password}
+    restart: unless-stopped
+    networks:
+      - rolebase
+
+networks:
+  role-api:
+    name: carting-api
+    driver: bridge
