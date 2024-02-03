@@ -1,7 +1,4 @@
-import {
-  INestApplication,
-  VersioningType,
-} from '@nestjs/common';
+import { INestApplication, VersioningType } from '@nestjs/common';
 
 export function setup(app: INestApplication) {
   app.enableVersioning({

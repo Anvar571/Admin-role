@@ -10,4 +10,4 @@ import { AccountModule } from './modules/accounts/accounts.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
