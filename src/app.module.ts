@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
-import { CoreModules } from './core/core.module';
-import { AccountModule } from './modules/accounts/accounts.module';
+import { ConfigModule } from '@nestjs/config';
+import { AccountModule } from './modules/account/account.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
-    CoreModules,
-    AccountModule
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    SharedModule,
+    AccountModule,
   ],
   controllers: [],
   providers: [],

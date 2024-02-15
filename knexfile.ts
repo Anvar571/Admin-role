@@ -1,32 +1,43 @@
-import type { Knex } from 'knex';
-import * as dotenv from 'dotenv';
+import 'dotenv/config'
 
-dotenv.config();
-const { DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, DB_CLIENT, DB_PORT } =
-  process.env;
+import { Knex } from 'knex'
+import { databaseCofigOptions } from 'src/configs/database.config';
 
-const config: { [key: string]: Knex.Config } = {
-  development: {
-    client: DB_CLIENT,
-    connection: {
-      host: DB_HOST,
-      database: DB_NAME,
-      user: DB_USER,
-      password: DB_PASSWORD,
-      port: parseInt(DB_PORT || '5432'),
-    },
-    pool: {
-      min: 2,
-      max: 10,
-    },
-    seeds: {
-      directory: './database/seeds',
-    },
-    migrations: {
-      tableName: 'knex_migrations',
-      directory: './database/migrations',
-    },
-  }
-};
+const config: {
+	[key: string]: Knex.Config
+} = {
+	development: {
+		client: 'pg',
+		connection: process.env.DATABASE_URL || databaseCofigOptions,
+		pool: {
+			min: 2,
+			max: 10,
+		},
+		seeds: {
+			directory: './database/seeds',
+		},
+		migrations: {
+			tableName: 'knex_migrations',
+			directory: './database/migrations',
+		},
+		useNullAsDefault: true,
+	},
+	production: {
+		client: 'pg',
+		connection: databaseCofigOptions,
+		pool: {
+			min: 2,
+			max: 10,
+		},
+		seeds: {
+			directory: './database/seeds',
+		},
+		migrations: {
+			tableName: 'knex_migrations',
+			directory: './database/migrations',
+		},
+		useNullAsDefault: true,
+	},
+}
 
-module.exports = config;
+export default config
