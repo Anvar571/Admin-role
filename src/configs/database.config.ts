@@ -9,11 +9,6 @@ export interface DatabaseConfigOptions {
 	filename?: string
 }
 
-export interface DatabaseMigrationOptions {
-	tableName: string
-	directory: string
-}
-
 export interface DatabasePoolOptions {
 	min: number
 	max: number
@@ -30,5 +25,5 @@ export const databaseCofigOptions: DatabaseConfigOptions = {
 
 export const databasePoolOptions: DatabasePoolOptions = {
 	min: process.env.DB_POOL_MIN ? parseInt(process.env.DB_POOL_MIN) : 1,
-	max: process.env.DB_POOL_MAX ? parseInt(process.env.DB_POOL_MAX) : 5,
+	max: process.env.DB_POOL_MAX ? parseInt(process.env.DB_POOL_MAX) : 25,
 }
