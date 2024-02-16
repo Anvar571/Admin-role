@@ -1,9 +1,15 @@
 import { Global, Module } from '@nestjs/common'
-import { databaseProvider } from './provider/database.service';
+import { AccountRepositoryProvider, databaseProvider } from './provider/providers';
 
 @Global()
 @Module({
-	providers: [databaseProvider],
-	exports: [databaseProvider],
+	providers: [
+		databaseProvider,
+		AccountRepositoryProvider,
+	],
+	exports: [
+		databaseProvider, 
+		AccountRepositoryProvider
+	],
 })
 export class SharedModule {}

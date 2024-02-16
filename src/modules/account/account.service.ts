@@ -1,12 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
-import { Knex } from 'knex';
+import { ACCOUNT_REPOSITORY } from 'src/shared/injects';
+import { AccountsRepository } from './repository/account.repository';
 
 @Injectable()
 export class AccountService {
   constructor(
-    @Inject('KnexConnection') private readonly knex: Knex
+    @Inject(ACCOUNT_REPOSITORY) private readonly accountRepository: AccountsRepository
   ) {}
 
   create(createAccountDto: CreateAccountDto) {

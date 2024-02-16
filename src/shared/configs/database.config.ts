@@ -6,7 +6,6 @@ export interface DatabaseConfigOptions {
 	password: string
 	host: string
 	port: number
-	filename?: string
 }
 
 export interface DatabasePoolOptions {
@@ -20,7 +19,6 @@ export const databaseCofigOptions: DatabaseConfigOptions = {
 	user: process.env.DB_USER ?? 'postgres',
 	password: process.env.DB_PASSWORD ?? 'postgres',
 	database: process.env.DB_DATABASE ?? 'postgres',
-	filename: './migrations.sql',
 }
 
 export const databasePoolOptions: DatabasePoolOptions = {

@@ -1,14 +1,14 @@
 import 'dotenv/config'
 
-import { Knex } from 'knex'
-import { databaseCofigOptions } from 'src/configs/database.config';
+import { Knex } from 'knex';
+import { databaseCofigOptions } from 'src/shared/configs/database.config';
 
 const config: {
 	[key: string]: Knex.Config
 } = {
 	development: {
 		client: 'pg',
-		connection: process.env.DATABASE_URL || databaseCofigOptions,
+		connection: databaseCofigOptions,
 		pool: {
 			min: 2,
 			max: 10,
