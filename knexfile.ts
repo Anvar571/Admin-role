@@ -1,7 +1,7 @@
 import 'dotenv/config'
 
 import { Knex } from 'knex';
-import { databaseCofigOptions } from 'src/shared/configs/database.config';
+import { databaseCofigOptions } from './src/shared/configs/database.config';
 
 const config: {
 	[key: string]: Knex.Config
