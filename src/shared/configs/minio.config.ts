@@ -1,0 +1,7 @@
+export const config = {
+  MINIO_ENDPOINT: 'localhost',
+  MINIO_PORT: 9001,
+  MINIO_ACCESSKEY: 'uDGLlWO8FW3mFcA6v33B',
+  MINIO_SECRETKEY: '2MJTg9Nc3CFN1XJHXRNuk9ROb3sCSnUqI6R5lwKX',
+  MINIO_BUCKET: 'roleappbucket'
+}

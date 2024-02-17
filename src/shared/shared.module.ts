@@ -7,6 +7,7 @@ import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from './pipe/validation.pipe';
 import { ConfigModule } from '@nestjs/config';
 import { HttpInterceptor } from './interceptors/http.interceptor';
+import { MinioModule } from './minio/minio.module';
 
 @Global()
 @Module({
@@ -14,6 +15,7 @@ import { HttpInterceptor } from './interceptors/http.interceptor';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    MinioModule,
   ],
   providers: [
     databaseProvider,
