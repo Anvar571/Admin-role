@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 
@@ -11,9 +11,7 @@ export class AuthController {
 
   @Post('auth/sign-up')
   registerWeb(@Body() data: RegisterDto) {
-    console.log(data);
-    return data;
-    // return this.authService.registerWeb(data);
+    return this.authService.registerWeb(data);
   }
 
   @Get('verifications')

@@ -1,15 +1,5 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AccountService } from './account.service';
-import { CreateAccountDto } from './dto/create-account.dto';
-import { UpdateAccountDto } from './dto/update-account.dto';
 
 @Controller('accounts')
 export class AccountController {
@@ -18,10 +8,5 @@ export class AccountController {
   @Get('me')
   findAll() {
     return 'first account';
-  }
-
-  @Get('second')
-  findOne(@Param('id') id: string) {
-    return 'two account';
   }
 }

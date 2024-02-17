@@ -14,11 +14,11 @@ export interface DatabasePoolOptions {
 }
 
 export const databaseCofigOptions: DatabaseConfigOptions = {
-  host: process.env.DB_HOST ?? 'postgres',
+  host: process.env.DB_HOST,
   port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
-  user: process.env.DB_USER ?? 'postgres',
-  password: process.env.DB_PASSWORD ?? 'postgres',
-  database: process.env.DB_DATABASE ?? 'postgres',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 };
 
 export const databasePoolOptions: DatabasePoolOptions = {

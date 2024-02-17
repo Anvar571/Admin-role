@@ -3,10 +3,10 @@ import {
   AccountRepositoryProvider,
   databaseProvider,
 } from './provider/providers';
-import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from './pipe/validation.pipe';
 import { ConfigModule } from '@nestjs/config';
-import { HttpExceptionFilter } from './middlewares/http.exaption';
+import { HttpInterceptor } from './interceptors/http.interceptor';
 
 @Global()
 @Module({
@@ -23,8 +23,8 @@ import { HttpExceptionFilter } from './middlewares/http.exaption';
       useClass: ZodValidationPipe,
     },
     {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
+      provide: APP_INTERCEPTOR,
+      useClass: HttpInterceptor,
     },
   ],
   exports: [databaseProvider, AccountRepositoryProvider],

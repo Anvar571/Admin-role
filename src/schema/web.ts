@@ -5,6 +5,7 @@ export const registerSchema = z.object({
   first_name: z.string({ required_error: 'first_name required' }),
   last_name: z.string(),
   phone: z.string().regex(PHONE_REGEX),
+  role_id: z.number(),
   email: z.string().email().optional(),
   photo: z.string().url(),
   type: z
