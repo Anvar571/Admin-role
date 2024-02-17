@@ -12,10 +12,26 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@schema/*": [
+        "./schema/*"
+      ],
+      "@shared/*": [
+        "./shared/*"
+      ]
+    },
+    "types": [
+      "node",
+      "jest"
+    ],
+  },
+  "include": [
+    "./src/**/*",
+    "./tests/**/*",
+    "./database/**/*"
+  ],
 }

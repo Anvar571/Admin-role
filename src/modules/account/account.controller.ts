@@ -15,28 +15,13 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
-  @Post()
-  create(@Body() createAccountDto: CreateAccountDto) {
-    return this.accountService.create(createAccountDto);
-  }
-
-  @Get()
+  @Get('me')
   findAll() {
-    return this.accountService.findAll();
+    return 'first account';
   }
 
-  @Get(':id')
+  @Get('second')
   findOne(@Param('id') id: string) {
-    return this.accountService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
-    return this.accountService.update(+id, updateAccountDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.accountService.remove(+id);
+    return 'two account';
   }
 }

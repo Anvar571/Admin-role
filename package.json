@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prepare": "husky"
+    "prepare": "husky install"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -31,9 +31,11 @@
     "dotenv": "^16.4.1",
     "knex": "^3.1.0",
     "nest-knexjs": "^0.0.20",
+    "nestjs-zod": "^3.0.0",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
