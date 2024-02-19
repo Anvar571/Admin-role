@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { isNumber } from 'util';
 
 @Injectable()
 export class MinioConfigService {
@@ -10,6 +11,8 @@ export class MinioConfigService {
   }
 
   getPort(): number {
+    const port = this.configService.get<number>('MINIO_PORT');
+    if (!isNumber(port)) return 9000;
     return this.configService.get<number>('MINIO_PORT');
   }
 
