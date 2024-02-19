@@ -1,10 +1,15 @@
-import { Controller, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
-import { MinioService } from "./minio.service";
+import {
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { MinioService } from './minio.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('uploads')
 export class UploadFilePhoto {
-  constructor(private readonly minioService: MinioService) { }
+  constructor(private readonly minioService: MinioService) {}
 
   @Post('/file')
   @UseInterceptors(FileInterceptor('file'))
@@ -13,7 +18,12 @@ export class UploadFilePhoto {
     const fileName = file.originalname;
     const contentType = file.mimetype;
 
-    const result = await this.minioService.uploadFile(bucketName, file.buffer, fileName, contentType);
+    const result = await this.minioService.uploadFile(
+      bucketName,
+      file.buffer,
+      fileName,
+      contentType,
+    );
     return { message: result };
   }
 }
