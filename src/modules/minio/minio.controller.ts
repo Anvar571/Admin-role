@@ -17,7 +17,6 @@ export class UploadController {
     const bucketName = 'roleproject';
     const fileName = file.originalname;
     const contentType = file.mimetype;
-    
 
     const result = await this.minioService.uploadFile(
       bucketName,

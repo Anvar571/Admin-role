@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { AuthRepository } from './repository/auth.repository';
 import { AccountsRepository } from '../account/repository/account.repository';
@@ -15,12 +20,14 @@ export class AuthService {
     private readonly passwordRepository: PasswordRepository,
     private readonly accountRepository: AccountsRepository,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService
-  ) { }
+    private readonly configService: ConfigService,
+  ) {}
 
   async registerWeb({ data }: RegisterDto) {
     const { password, ...otherData } = data;
-    const hasAccount = await this.accountRepository.findByPhone(otherData.phone);
+    const hasAccount = await this.accountRepository.findByPhone(
+      otherData.phone,
+    );
 
     if (hasAccount) {
       throw new ConflictException('This account already registered');
@@ -38,7 +45,9 @@ export class AuthService {
       throw new NotFoundException('This account was not found');
     }
 
-    const hasHash = await this.passwordRepository.findHashByAccountId(hashAccount.id);
+    const hasHash = await this.passwordRepository.findHashByAccountId(
+      hashAccount.id,
+    );
 
     if (!hasHash) {
       throw new NotFoundException('This account was not found');
@@ -48,16 +57,14 @@ export class AuthService {
       throw new UnauthorizedException('Login and password is wrong');
     }
 
-    const access_token = await this.genereateToken(
-      {
-        sub: hashAccount.id,
-        user: {
-          name: hashAccount.first_name,
-          role_id: hashAccount.role_id
-        }
-      }
-    );
-    return { id: hashAccount.id, type: 'accounts', access_token }
+    const access_token = await this.genereateToken({
+      sub: hashAccount.id,
+      user: {
+        name: hashAccount.first_name,
+        role_id: hashAccount.role_id,
+      },
+    });
+    return { id: hashAccount.id, type: 'accounts', access_token };
   }
 
   async genereateHash(password: string): Promise<string> {
@@ -73,8 +80,8 @@ export class AuthService {
   async genereateToken(payload: any): Promise<string> {
     const options = {
       secret: this.configService.get('JWT_SECRET'),
-      expiresIn: this.configService.get('JWT_EXPIRE_AT')
-    }
+      expiresIn: this.configService.get('JWT_EXPIRE_AT'),
+    };
 
     return this.jwtService.sign(payload, options);
   }

@@ -9,16 +9,16 @@ import { JwtService } from '@nestjs/jwt';
 @Module({
   controllers: [AuthController],
   providers: [
-    AuthService, 
-    AuthRepository, 
-    AccountsRepository, 
+    AuthService,
+    AuthRepository,
+    AccountsRepository,
     PasswordRepository,
     JwtService,
   ],
   exports: [
-    AuthService, 
-    AuthRepository, 
-    AccountsRepository, 
+    AuthService,
+    AuthRepository,
+    AccountsRepository,
     PasswordRepository,
     JwtService,
   ],

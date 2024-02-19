@@ -2,7 +2,7 @@ import { Knex } from 'knex';
 import { InjectKnex } from 'src/shared/utility/knex.inject';
 
 export class PasswordRepository {
-  constructor(@InjectKnex() private readonly knex: Knex) { }
+  constructor(@InjectKnex() private readonly knex: Knex) {}
 
   async interPassword(data: {
     hash: string;
@@ -13,6 +13,8 @@ export class PasswordRepository {
   }
 
   async findHashByAccountId(account_id: number) {
-    return this.knex('passwords').where({ account_id, is_active: 'true' }).first();
+    return this.knex('passwords')
+      .where({ account_id, is_active: 'true' })
+      .first();
   }
 }

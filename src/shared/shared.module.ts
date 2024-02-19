@@ -20,11 +20,11 @@ import { AuthGuardWithJwt } from './guards/auth.guard';
       isGlobal: true,
     }),
     JwtModule.registerAsync({
-      useClass: JwtOptions
+      useClass: JwtOptions,
     }),
     PassportModule.registerAsync({
-      useClass: PassportConfig
-    })
+      useClass: PassportConfig,
+    }),
   ],
   providers: [
     databaseProvider,
@@ -39,9 +39,9 @@ import { AuthGuardWithJwt } from './guards/auth.guard';
     },
     {
       provide: APP_GUARD,
-      useClass: AuthGuardWithJwt
-    }
+      useClass: AuthGuardWithJwt,
+    },
   ],
   exports: [databaseProvider, AccountRepositoryProvider],
 })
-export class SharedModule { }
+export class SharedModule {}

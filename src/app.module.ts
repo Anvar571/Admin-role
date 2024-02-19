@@ -5,12 +5,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MinioModule } from './modules/minio/minio.module';
 
 @Module({
-  imports: [
-    SharedModule, 
-    AuthModule, 
-    AccountModule,
-    MinioModule
-  ],
+  imports: [SharedModule, AuthModule, AccountModule, MinioModule],
   controllers: [],
   providers: [],
 })
