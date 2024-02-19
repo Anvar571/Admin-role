@@ -8,15 +8,16 @@ import { MinioService } from './minio.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('uploads')
-export class UploadFilePhoto {
+export class UploadController {
   constructor(private readonly minioService: MinioService) {}
 
   @Post('/file')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFileAndPhoto(@UploadedFile() file) {
-    const bucketName = 'roleappbucket';
+    const bucketName = 'roleproject';
     const fileName = file.originalname;
     const contentType = file.mimetype;
+    
 
     const result = await this.minioService.uploadFile(
       bucketName,

@@ -12,6 +12,7 @@ export class MinioService {
       port: this.configService.getPort() || 9000,
       accessKey: this.configService.getAccessKey(),
       secretKey: this.configService.getSecretKey(),
+
     });
   }
 

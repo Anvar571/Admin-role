@@ -2,7 +2,9 @@ import { Knex } from 'knex';
 import { InjectKnex } from 'src/shared/utility/knex.inject';
 
 export class AccountsRepository {
-  constructor(@InjectKnex() private readonly knex: Knex) {}
+  constructor(@InjectKnex() private readonly knex: Knex) { }
 
-  findAllAccounts() {}
+  findByPhone(phone: string) {
+    return this.knex('accounts').where({ phone, status: 'active' }).first();
+  }
 }

@@ -3,11 +3,15 @@ import {
   AccountRepositoryProvider,
   databaseProvider,
 } from './provider/providers';
-import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from './pipe/validation.pipe';
 import { ConfigModule } from '@nestjs/config';
 import { HttpInterceptor } from './interceptors/http.interceptor';
-import { MinioModule } from './minio/minio.module';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtOptions } from './configs/jwt.options';
+import { PassportModule } from '@nestjs/passport';
+import { PassportConfig } from './configs/password.config';
+import { AuthGuardWithJwt } from './guards/auth.guard';
 
 @Global()
 @Module({
@@ -15,7 +19,12 @@ import { MinioModule } from './minio/minio.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MinioModule,
+    JwtModule.registerAsync({
+      useClass: JwtOptions
+    }),
+    PassportModule.registerAsync({
+      useClass: PassportConfig
+    })
   ],
   providers: [
     databaseProvider,
@@ -28,7 +37,11 @@ import { MinioModule } from './minio/minio.module';
       provide: APP_INTERCEPTOR,
       useClass: HttpInterceptor,
     },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuardWithJwt
+    }
   ],
   exports: [databaseProvider, AccountRepositoryProvider],
 })
-export class SharedModule {}
+export class SharedModule { }

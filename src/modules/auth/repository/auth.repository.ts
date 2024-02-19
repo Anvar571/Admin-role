@@ -9,7 +9,7 @@ export class AuthRepository {
     try {
       const res = await this.knex.transaction(async (trx) => {
         return trx('accounts')
-          .insert(data)
+          .insert({...data, status: 'active'})
           .returning('*')
           .then(async ([res]) => {
             await trx('passwords').insert({ account_id: res.id, hash });
