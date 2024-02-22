@@ -1,15 +1,19 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ACCOUNT_REPOSITORY } from 'src/shared/injects';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AccountsRepository } from './repository/account.repository';
 
 @Injectable()
 export class AccountService {
   constructor(
-    @Inject(ACCOUNT_REPOSITORY)
     private readonly accountRepository: AccountsRepository,
-  ) {}
+  ) { }
 
-  getMe() {
-    
+  async getMe(account_id: number) {
+    const res = await this.accountRepository.findByAnyParam({ id: account_id });
+
+    if (!res) {
+      throw new NotFoundException('This user was not found');
+    }
+
+    return res
   }
 }

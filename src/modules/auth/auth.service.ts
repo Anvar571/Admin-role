@@ -65,9 +65,9 @@ export class AuthService {
         role_id: hashAccount.role_id,
       },
     });
-    
+
     console.log(access_token, 'access_token');
-    
+
     return { id: hashAccount.id, type: 'accounts', access_token };
   }
 

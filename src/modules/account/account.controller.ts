@@ -7,9 +7,7 @@ export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   @Get('me')
-  findAll(@User('ids') account_id: number) {
-    console.log(account_id, 'account_id');
-    
-    return 'first account';
+  findAll(@User('id') account_id: number) {
+    return this.accountService.getMe(account_id);
   }
 }

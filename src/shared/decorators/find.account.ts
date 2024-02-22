@@ -18,9 +18,11 @@ export const User = createParamDecorator(
 
     try {
       if (!data) {
-        return user.user
+        return user.user;
       } else if (!(data in user?.user)) {
-        throw new InternalServerErrorException('There is an error in the user decarator')
+        throw new InternalServerErrorException(
+          'There is an error in the user decarator',
+        );
       }
 
       return user.user[data];

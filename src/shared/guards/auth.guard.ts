@@ -15,7 +15,7 @@ export class AuthGuardWithJwt extends AuthGuard('jwt') {
   constructor(
     private readonly reflector: Reflector,
     private readonly jwtService: JwtService,
-    private readonly accountRepository: AccountsRepository
+    private readonly accountRepository: AccountsRepository,
   ) {
     super();
   }
@@ -37,7 +37,7 @@ export class AuthGuardWithJwt extends AuthGuard('jwt') {
     const authToken: string = req.headers['authorization'];
 
     if (!authToken) {
-      throw new UnauthorizedException('Token not found')
+      throw new UnauthorizedException('Token not found');
     }
 
     const [hasBearer, token] = authToken.split(' ');
@@ -49,12 +49,14 @@ export class AuthGuardWithJwt extends AuthGuard('jwt') {
     }
 
     const checkToken = await this.jwtService.decode(token);
-    
+
     if (!checkToken?.user?.id) {
-      throw new UnauthorizedException('An error was found with the user token')
+      throw new UnauthorizedException('An error was found with the user token');
     }
 
-    const hasAccount = await this.accountRepository.findByAnyParam({ id: checkToken.user.id });
+    const hasAccount = await this.accountRepository.findByAnyParam({
+      id: checkToken.user.id,
+    });
 
     if (!hasAccount) {
       throw new UnauthorizedException('Account not found');
