@@ -60,10 +60,14 @@ export class AuthService {
     const access_token = await this.genereateToken({
       sub: hashAccount.id,
       user: {
+        id: hashAccount.id,
         name: hashAccount.first_name,
         role_id: hashAccount.role_id,
       },
     });
+    
+    console.log(access_token, 'access_token');
+    
     return { id: hashAccount.id, type: 'accounts', access_token };
   }
 

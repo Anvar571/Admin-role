@@ -18,11 +18,12 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@schema/*": [
-        "./schema/*"
+        "./src/schema/*"
       ],
       "@shared/*": [
-        "./shared/*"
-      ]
+        "./src/shared/*"
+      ],
+      "@src/*": ["./src/*"]
     },
     "types": [
       "node",

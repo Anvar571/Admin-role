@@ -8,4 +8,8 @@ export class AccountService {
     @Inject(ACCOUNT_REPOSITORY)
     private readonly accountRepository: AccountsRepository,
   ) {}
+
+  getMe() {
+    
+  }
 }

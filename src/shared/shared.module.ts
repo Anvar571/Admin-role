@@ -12,6 +12,7 @@ import { JwtOptions } from './configs/jwt.options';
 import { PassportModule } from '@nestjs/passport';
 import { PassportConfig } from './configs/password.config';
 import { AuthGuardWithJwt } from './guards/auth.guard';
+import { AccountModule } from '@src/modules/account/account.module';
 
 @Global()
 @Module({
@@ -25,6 +26,7 @@ import { AuthGuardWithJwt } from './guards/auth.guard';
     PassportModule.registerAsync({
       useClass: PassportConfig,
     }),
+    AccountModule,
   ],
   providers: [
     databaseProvider,
