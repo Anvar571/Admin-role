@@ -12,6 +12,7 @@ import { LoginWebDto } from './dto/login.dto';
 import { PasswordRepository } from './repository/password.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { JWT_INTERFACE } from '@shared/configs/jwt.options';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +22,7 @@ export class AuthService {
     private readonly accountRepository: AccountsRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async registerWeb({ data }: RegisterDto) {
     const { password, ...otherData } = data;
@@ -57,18 +58,25 @@ export class AuthService {
       throw new UnauthorizedException('Login and password is wrong');
     }
 
-    const access_token = await this.genereateToken({
+    const access_token = await this.genereateTokenAccessToken({
       sub: hashAccount.id,
       user: {
         id: hashAccount.id,
         name: hashAccount.first_name,
-        role_id: hashAccount.role_id,
+        type: hashAccount.type,
       },
     });
 
-    console.log(access_token, 'access_token');
+    const refresh_token = await this.genereateRefreshToken({
+      sub: hashAccount.id,
+      user: {
+        id: hashAccount.id,
+        name: hashAccount.first_name,
+        type: hashAccount.type,
+      },
+    });
 
-    return { id: hashAccount.id, type: 'accounts', access_token };
+    return { id: hashAccount.id, type: hashAccount.type, access_token, refresh_token };
   }
 
   async genereateHash(password: string): Promise<string> {
@@ -81,12 +89,28 @@ export class AuthService {
     return bcrypt.compare(password, hash);
   }
 
-  async genereateToken(payload: any): Promise<string> {
+  async genereateTokenAccessToken(payload: any): Promise<string> {
     const options = {
-      secret: this.configService.get('JWT_SECRET'),
-      expiresIn: this.configService.get('JWT_EXPIRE_AT'),
+      secret: this.configService.get(JWT_INTERFACE.JWT_SECRET),
+      expiresIn: this.configService.get(JWT_INTERFACE.JWT_EXPIRE_AT),
     };
 
     return this.jwtService.sign(payload, options);
   }
+
+  /**
+   * This method generate new access token by refresh token
+   * @param user 
+   * @returns 
+   */
+  async genereateRefreshToken(payload: any): Promise<string> {
+    const options = {
+      secret: this.configService.get(JWT_INTERFACE.JWT_REFRESH_SECRET),
+      expiresIn: this.configService.get(JWT_INTERFACE.JWT_REFRESH_EXPIRES_IN)
+    }
+
+    return this.jwtService.sign(payload, options);
+  }
+
+  async updateAccessToken() { }
 }

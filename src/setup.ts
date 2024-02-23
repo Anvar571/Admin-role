@@ -1,4 +1,5 @@
 import { INestApplication, VersioningType } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 
 export function setup(app: INestApplication) {
   app.enableVersioning({
@@ -6,4 +7,10 @@ export function setup(app: INestApplication) {
     prefix: 'v',
     defaultVersion: '1',
   });
+
+  app.use(cookieParser());
+  app.enableCors({
+    credentials: true,
+    origin: process.env.FRONTEND_URL,
+  })
 }

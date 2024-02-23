@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Patch } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { User } from '@shared/decorators/find.account';
 
@@ -10,4 +10,11 @@ export class AccountController {
   findAll(@User('id') account_id: number) {
     return this.accountService.getMe(account_id);
   }
+
+  @Patch("me")
+  updateAccount() {}
+
+
+  @Get('')
+  getOneAccount() {}
 }

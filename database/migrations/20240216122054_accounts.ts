@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string('last_name').notNullable();
         table.integer('role_id').notNullable();
         table.string('phone').notNullable();
-        table.enum('type', ['company', 'account', 'employee']).notNullable();
+        table.enum('type', ['company', 'accounts', 'employees']).notNullable();
         table.string('photo').notNullable();
         table.enum('status', ['active', 'deleted', 'block'])
         table.timestamp('created_at').defaultTo(knex.fn.now());
