@@ -5,7 +5,7 @@ import { IdDto } from '@shared/pipe/id-validation.pipe';
 
 @Controller('accounts')
 export class AccountController {
-  constructor(private readonly accountService: AccountService) { }
+  constructor(private readonly accountService: AccountService) {}
 
   @Get('me')
   findAll(@User('id') account_id: number) {
@@ -13,10 +13,10 @@ export class AccountController {
   }
 
   @Patch('me')
-  updateAccount() { }
+  updateAccount() {}
 
   @Get(':id')
-  getOneAccount(@Param() { data }: IdDto) { 
+  getOneAccount(@Param() { data }: IdDto) {
     return this.accountService.accountOne(data.id);
   }
 }

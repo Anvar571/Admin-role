@@ -5,6 +5,7 @@ import { AuthRepository } from './repository/auth.repository';
 import { AccountsRepository } from '../account/repository/account.repository';
 import { PasswordRepository } from './repository/password.repository';
 import { JwtService } from '@nestjs/jwt';
+import { VerificationRepository } from './repository/verification.repository';
 
 @Module({
   controllers: [AuthController],
@@ -14,6 +15,7 @@ import { JwtService } from '@nestjs/jwt';
     AccountsRepository,
     PasswordRepository,
     JwtService,
+    VerificationRepository,
   ],
   exports: [
     AuthService,
@@ -21,6 +23,7 @@ import { JwtService } from '@nestjs/jwt';
     AccountsRepository,
     PasswordRepository,
     JwtService,
+    VerificationRepository,
   ],
 })
 export class AuthModule {}

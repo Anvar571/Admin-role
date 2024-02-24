@@ -19,3 +19,22 @@ export const loginSchema = z.object({
   phone: z.string().regex(PHONE_REGEX),
   password: z.string().min(6).max(20),
 });
+
+export enum AccountStatus {
+  ACTIVE = 'active',
+  PENDING = 'pending',
+  BLOCK = 'block',
+  DELETED = 'deleted',
+}
+
+export enum VerificationAction {
+  REGISTRATION = 'registration',
+  RESERT_PASSWORD = 'resert_password',
+  LOGIN = 'login',
+}
+
+export enum VerificationStatus {
+  VERIFIED = 'verified',
+  CANCEL = 'cancel',
+  PENDING = 'pending',
+}

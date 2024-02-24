@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
             'login',
             'forget_password',
         ]);
-        table.enum('status', ['success', 'pending', 'failed']);
+        table.enum('status', ['verified', 'pending', 'cancel']);
         table.timestamp('expired_at').notNullable();
         table.timestamp('created_at').defaultTo(knex.fn.now());
     })

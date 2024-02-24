@@ -30,5 +30,7 @@ export class AuthController {
   }
 
   @Get('verifications')
-  getAllPendingVerifications() {}
+  getAllPendingVerifications() {
+    return this.authService.findAllVerifications();
+  }
 }

@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { AuthRepository } from './repository/auth.repository';
@@ -13,6 +14,9 @@ import { PasswordRepository } from './repository/password.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JWT_INTERFACE } from '@shared/configs/jwt.options';
+import { AccountStatus, VerificationAction } from '@schema/web';
+import { VerificationRepository } from './repository/verification.repository';
+import { randomBytes } from 'node:crypto';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +26,7 @@ export class AuthService {
     private readonly accountRepository: AccountsRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly vereficationRepository: VerificationRepository,
   ) {}
 
   async registerWeb({ data }: RegisterDto) {
@@ -36,7 +41,21 @@ export class AuthService {
 
     const hash = await this.genereateHash(password);
 
-    return this.authRepository.insertAccountAndPassword(otherData, hash);
+    const [res] = await this.authRepository.insertAccountAndPassword(
+      otherData,
+      hash,
+      AccountStatus.PENDING,
+    );
+
+    const verificationCode = await this.createVerification(
+      res.id,
+      VerificationAction.REGISTRATION,
+    );
+
+    return {
+      id: verificationCode.id,
+      code: verificationCode.code,
+    };
   }
 
   async loginWeb({ data }: LoginWebDto) {
@@ -118,4 +137,40 @@ export class AuthService {
   }
 
   async updateAccessToken() {}
+
+  async createVerification(
+    account_id: number,
+    action: VerificationAction,
+  ): Promise<{ id: number; code: number }> {
+    const code = Number(randomBytes(4).toString());
+
+    const res = await this.vereficationRepository.createVerification(
+      account_id,
+      action,
+      code,
+    );
+
+    return {
+      id: res.id,
+      code,
+    };
+  }
+
+  async findAllVerifications() {
+    return this.vereficationRepository.findAllVerifications();
+  }
+
+  async verifiedAccount(verification_id: number, code: string) {
+    const hasVerification = await this.vereficationRepository.findVerification(
+      verification_id,
+    );
+
+    if (!hasVerification) {
+      throw new NotFoundException('Verification was not found');
+    }
+
+    if (hasVerification.code !== code) {
+      throw new UnprocessableEntityException('Verification code wrong');
+    }
+  }
 }

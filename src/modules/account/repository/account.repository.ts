@@ -9,6 +9,9 @@ export class AccountsRepository {
   }
 
   findByAnyParam(param: any) {
-    return this.knex('accounts').where(param).first();
+    return this.knex('accounts')
+      .where(param)
+      .andWhere('status', 'active')
+      .first();
   }
 }
