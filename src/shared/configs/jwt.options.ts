@@ -6,12 +6,12 @@ export enum JWT_INTERFACE {
   JWT_SECRET = 'JWT_SECRET',
   JWT_EXPIRE_AT = 'JWT_EXPIRE_AT',
   JWT_REFRESH_SECRET = 'JWT_REFRESH_SECRET',
-  JWT_REFRESH_EXPIRES_IN = 'JWT_REFRESH_EXPIRES_IN'
+  JWT_REFRESH_EXPIRES_IN = 'JWT_REFRESH_EXPIRES_IN',
 }
 
 @Injectable()
 export class JwtOptions implements JwtOptionsFactory {
-  constructor(private readonly configService: ConfigService) { }
+  constructor(private readonly configService: ConfigService) {}
 
   createJwtOptions(): JwtModuleOptions | Promise<JwtModuleOptions> {
     return {

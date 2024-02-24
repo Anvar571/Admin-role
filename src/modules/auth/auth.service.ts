@@ -22,7 +22,7 @@ export class AuthService {
     private readonly accountRepository: AccountsRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   async registerWeb({ data }: RegisterDto) {
     const { password, ...otherData } = data;
@@ -76,7 +76,12 @@ export class AuthService {
       },
     });
 
-    return { id: hashAccount.id, type: hashAccount.type, access_token, refresh_token };
+    return {
+      id: hashAccount.id,
+      type: hashAccount.type,
+      access_token,
+      refresh_token,
+    };
   }
 
   async genereateHash(password: string): Promise<string> {
@@ -100,17 +105,17 @@ export class AuthService {
 
   /**
    * This method generate new access token by refresh token
-   * @param user 
-   * @returns 
+   * @param user
+   * @returns
    */
   async genereateRefreshToken(payload: any): Promise<string> {
     const options = {
       secret: this.configService.get(JWT_INTERFACE.JWT_REFRESH_SECRET),
-      expiresIn: this.configService.get(JWT_INTERFACE.JWT_REFRESH_EXPIRES_IN)
-    }
+      expiresIn: this.configService.get(JWT_INTERFACE.JWT_REFRESH_EXPIRES_IN),
+    };
 
     return this.jwtService.sign(payload, options);
   }
 
-  async updateAccessToken() { }
+  async updateAccessToken() {}
 }

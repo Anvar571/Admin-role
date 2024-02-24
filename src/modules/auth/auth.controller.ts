@@ -7,16 +7,19 @@ import { Response as ResExpr } from 'express';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @PublicAPI()
   @Post('auth/sign-in')
-  async loginWeb(@Response({ passthrough: true }) res: ResExpr, @Body() dto: LoginWebDto) {
+  async loginWeb(
+    @Response({ passthrough: true }) res: ResExpr,
+    @Body() dto: LoginWebDto,
+  ) {
     const result = await this.authService.loginWeb(dto);
     res.cookie('user_refresh_token', result.refresh_token, {
-      httpOnly: true,
-
+      httpOnly: false,
     });
+    delete result.refresh_token;
     return result;
   }
 
@@ -27,5 +30,5 @@ export class AuthController {
   }
 
   @Get('verifications')
-  getAllPendingVerifications() { }
+  getAllPendingVerifications() {}
 }

@@ -23,6 +23,8 @@ export class AuthGuardWithJwt extends AuthGuard('jwt') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const ctx = context.switchToHttp();
     const isPublic = this.reflector.get(IS_PUBLIC_KEY, context.getHandler());
+    const request = ctx.getRequest();
+    const refresh_token = request?.cookies?.user_refresh_token;
 
     if (isPublic) {
       return ctx.getNext();
@@ -37,6 +39,9 @@ export class AuthGuardWithJwt extends AuthGuard('jwt') {
     const authToken: string = req.headers['authorization'];
 
     if (!authToken) {
+      throw new UnauthorizedException('Token not found');
+    }
+    if (!refresh_token) {
       throw new UnauthorizedException('Token not found');
     }
 

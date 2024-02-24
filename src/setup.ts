@@ -12,5 +12,5 @@ export function setup(app: INestApplication) {
   app.enableCors({
     credentials: true,
     origin: process.env.FRONTEND_URL,
-  })
+  });
 }

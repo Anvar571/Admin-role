@@ -9,8 +9,8 @@ export const registerSchema = z.object({
   email: z.string().email().optional(),
   photo: z.string().url(),
   type: z
-    .enum(['customer', 'admin', 'moderator'])
-    .default('customer')
+    .enum(['company', 'accounts', 'employees'])
+    .default('accounts')
     .optional(),
   password: z.string().min(6).max(20),
 });
