@@ -51,6 +51,6 @@ export class VerificationRepository {
   }
 
   async verifiedAccount(account_id: number) {
-    return account_id
+    return account_id;
   }
 }

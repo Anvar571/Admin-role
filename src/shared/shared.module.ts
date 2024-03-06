@@ -3,7 +3,7 @@ import {
   AccountRepositoryProvider,
   databaseProvider,
 } from './provider/providers';
-import { APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from './pipe/validation.pipe';
 import { ConfigModule } from '@nestjs/config';
 import { HttpInterceptor } from './interceptors/http.interceptor';
@@ -13,6 +13,7 @@ import { PassportModule } from '@nestjs/passport';
 import { PassportConfig } from './configs/password.config';
 import { AuthGuardWithJwt } from './guards/auth.guard';
 import { AccountModule } from '@src/modules/account/account.module';
+import { HttpExceptionFilter } from './middlewares/http.exaption';
 
 @Global()
 @Module({
@@ -42,6 +43,10 @@ import { AccountModule } from '@src/modules/account/account.module';
     {
       provide: APP_GUARD,
       useClass: AuthGuardWithJwt,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
     },
   ],
   exports: [databaseProvider, AccountRepositoryProvider],
