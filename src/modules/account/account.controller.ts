@@ -8,8 +8,9 @@ export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   @Get('me')
-  findAll(@User('id') account_id: number) {
-    return this.accountService.getMe(account_id);
+  async findAll(@User('id') account_id: number) {
+    const res = await this.accountService.getMe(account_id);
+    return res;
   }
 
   @Patch('me')

@@ -1,8 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import {
-  AccountRepositoryProvider,
-  databaseProvider,
-} from './provider/providers';
+import { databaseProvider } from './provider/providers';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ZodValidationPipe } from './pipe/validation.pipe';
 import { ConfigModule } from '@nestjs/config';
@@ -31,7 +28,6 @@ import { HttpExceptionFilter } from './middlewares/http.exaption';
   ],
   providers: [
     databaseProvider,
-    AccountRepositoryProvider,
     {
       provide: APP_PIPE,
       useClass: ZodValidationPipe,
@@ -49,6 +45,6 @@ import { HttpExceptionFilter } from './middlewares/http.exaption';
       useClass: HttpExceptionFilter,
     },
   ],
-  exports: [databaseProvider, AccountRepositoryProvider],
+  exports: [databaseProvider],
 })
 export class SharedModule {}

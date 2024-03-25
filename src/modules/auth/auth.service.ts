@@ -16,10 +16,14 @@ import { ConfigService } from '@nestjs/config';
 import { JWT_INTERFACE } from '@shared/configs/jwt.options';
 import { AccountStatus, VerificationAction } from '@schema/web';
 import { VerificationRepository } from './repository/verification.repository';
-import { randomBytes } from 'node:crypto';
+import { randomInt } from 'node:crypto';
 
 @Injectable()
 export class AuthService {
+  private isProd = new RegExp('true').test(
+    this.configService.get('IS_PRODUCTION') as string,
+  );
+
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly passwordRepository: PasswordRepository,
@@ -58,7 +62,13 @@ export class AuthService {
     };
   }
 
-  async loginWeb({ data }: LoginWebDto) {
+  async loginWeb({ data }: LoginWebDto): Promise<{
+    id: number;
+    access_token?: string;
+    refresh_token?: string;
+    expired_at?: Date;
+    code?: number;
+  }> {
     const hashAccount = await this.accountRepository.findByPhone(data.phone);
 
     if (!hashAccount) {
@@ -77,30 +87,48 @@ export class AuthService {
       throw new UnauthorizedException('Login and password is wrong');
     }
 
-    const access_token = await this.genereateTokenAccessToken({
-      sub: hashAccount.id,
-      user: {
-        id: hashAccount.id,
-        name: hashAccount.first_name,
-        type: hashAccount.type,
-      },
-    });
+    if (hashAccount.status === 'pending') {
+      const res = await this.createVerification(
+        hashAccount.id,
+        VerificationAction.LOGIN,
+      );
+      if (this.isProd) {
+        return {
+          id: res.id,
+          expired_at: res.expired_at,
+        };
+      } else {
+        return {
+          id: res.id,
+          code: res.code,
+          expired_at: res.expired_at,
+        };
+      }
+    } else {
+      const access_token = await this.genereateTokenAccessToken({
+        sub: hashAccount.id,
+        user: {
+          id: hashAccount.id,
+          name: hashAccount.first_name,
+          type: hashAccount.type,
+        },
+      });
 
-    const refresh_token = await this.genereateRefreshToken({
-      sub: hashAccount.id,
-      user: {
-        id: hashAccount.id,
-        name: hashAccount.first_name,
-        type: hashAccount.type,
-      },
-    });
+      const refresh_token = await this.genereateRefreshToken({
+        sub: hashAccount.id,
+        user: {
+          id: hashAccount.id,
+          name: hashAccount.first_name,
+          type: hashAccount.type,
+        },
+      });
 
-    return {
-      id: hashAccount.id,
-      type: hashAccount.type,
-      access_token,
-      refresh_token,
-    };
+      return {
+        id: hashAccount.id,
+        access_token,
+        refresh_token,
+      };
+    }
   }
 
   async genereateHash(password: string): Promise<string> {
@@ -141,18 +169,24 @@ export class AuthService {
   async createVerification(
     account_id: number,
     action: VerificationAction,
-  ): Promise<{ id: number; code: number }> {
-    const code = Number(randomBytes(4).toString());
+  ): Promise<{ id: number; code: number; expired_at: Date }> {
+    const code = randomInt(1000, 9999);
+    const currentTime = new Date(Date.now());
+    const expired_at = new Date(
+      currentTime.setTime(currentTime.getTime() + 1000 * 3 * 60),
+    );
 
     const res = await this.vereficationRepository.createVerification(
       account_id,
       action,
       code,
+      expired_at,
     );
 
     return {
       id: res.id,
       code,
+      expired_at: res.expired_at,
     };
   }
 

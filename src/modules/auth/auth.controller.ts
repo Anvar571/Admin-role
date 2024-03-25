@@ -16,11 +16,15 @@ export class AuthController {
     @Body() dto: LoginWebDto,
   ) {
     const result = await this.authService.loginWeb(dto);
-    res.cookie('user_refresh_token', result.refresh_token, {
-      httpOnly: false,
-    });
-    delete result.refresh_token;
-    return result;
+    if (result.refresh_token) {
+      res.cookie('user_refresh_token', result.refresh_token, {
+        httpOnly: false,
+      });
+      delete result.refresh_token;
+      return result;
+    } else {
+      return result;
+    }
   }
 
   @PublicAPI()
@@ -29,8 +33,14 @@ export class AuthController {
     return this.authService.registerWeb(data);
   }
 
-  @Get('verifications')
+  @Get('auth/verifications')
   getAllPendingVerifications() {
     return this.authService.findAllVerifications();
+  }
+
+  @PublicAPI()
+  @Post('auth/verification')
+  verification(@Body() data: any) {
+    return data;
   }
 }

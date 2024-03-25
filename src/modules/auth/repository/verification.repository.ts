@@ -9,26 +9,28 @@ export class VerificationRepository {
     account_id: number,
     action: VerificationAction,
     code: number,
-  ) {
-    const [res] = await this.knex.transaction(async (trx) => {
+    expired_at: Date,
+  ): Promise<any> {
+    return this.knex.transaction(async (trx) => {
       return trx('verifications')
         .insert({
           account_id,
           action,
           code,
           status: VerificationStatus.PENDING,
+          expired_at,
         })
         .returning('*')
         .then(async ([res]) => {
           await trx('verifications')
-            .where({ account_id: res.id })
+            .where({ account_id })
+            .whereNot('verifications.id', res.id)
             .update({ status: VerificationStatus.CANCEL });
           return res;
         })
         .then(trx.commit)
         .catch(trx.rollback);
     });
-    return res;
   }
 
   async findVerification(id: number) {
