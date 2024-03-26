@@ -10,9 +10,9 @@ export class AuthRepository {
     data: any,
     hash: string,
     status: AccountStatus,
-  ) {
+  ): Promise<any> {
     try {
-      const res = await this.knex.transaction(async (trx) => {
+      return this.knex.transaction(async (trx) => {
         return trx('accounts')
           .insert({ ...data, status })
           .returning('*')
@@ -23,7 +23,6 @@ export class AuthRepository {
           .then(trx.commit)
           .catch(trx.rollback);
       });
-      return res;
     } catch (error: any) {
       throw new InternalServerErrorException(error.message);
     }

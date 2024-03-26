@@ -7,7 +7,7 @@ import { Response as ResExpr } from 'express';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @PublicAPI()
   @Post('auth/sign-in')
@@ -40,7 +40,7 @@ export class AuthController {
 
   @PublicAPI()
   @Post('auth/verification')
-  verification(@Body() data: any) {
-    return data;
+  verification(@Body() data: { id: number, code: number }) {
+    return this.authService.verifiedAccount(data.id, data.code);
   }
 }

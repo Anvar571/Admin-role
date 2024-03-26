@@ -14,7 +14,7 @@ import { PasswordRepository } from './repository/password.repository';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JWT_INTERFACE } from '@shared/configs/jwt.options';
-import { AccountStatus, VerificationAction } from '@schema/web';
+import { AccountStatus, VerificationAction, VerificationStatus } from '@schema/web';
 import { VerificationRepository } from './repository/verification.repository';
 import { randomInt } from 'node:crypto';
 
@@ -31,7 +31,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly vereficationRepository: VerificationRepository,
-  ) {}
+  ) { }
 
   async registerWeb({ data }: RegisterDto) {
     const { password, ...otherData } = data;
@@ -45,7 +45,7 @@ export class AuthService {
 
     const hash = await this.genereateHash(password);
 
-    const [res] = await this.authRepository.insertAccountAndPassword(
+    const res = await this.authRepository.insertAccountAndPassword(
       otherData,
       hash,
       AccountStatus.PENDING,
@@ -64,6 +64,7 @@ export class AuthService {
 
   async loginWeb({ data }: LoginWebDto): Promise<{
     id: number;
+    user?: object,
     access_token?: string;
     refresh_token?: string;
     expired_at?: Date;
@@ -125,6 +126,10 @@ export class AuthService {
 
       return {
         id: hashAccount.id,
+        user: {
+          name: hashAccount.id,
+          type: hashAccount.type
+        },
         access_token,
         refresh_token,
       };
@@ -164,7 +169,7 @@ export class AuthService {
     return this.jwtService.sign(payload, options);
   }
 
-  async updateAccessToken() {}
+  async updateAccessToken() { }
 
   async createVerification(
     account_id: number,
@@ -194,9 +199,13 @@ export class AuthService {
     return this.vereficationRepository.findAllVerifications();
   }
 
-  async verifiedAccount(verification_id: number, code: string) {
-    const hasVerification = await this.vereficationRepository.findVerification(
-      verification_id,
+  async verifiedAccount(verification_id: number, code: number) {
+    const hasVerification = await this.vereficationRepository.findVerificationByAnyParam(
+      {
+        id: verification_id,
+        status: VerificationStatus.PENDING,
+        action: VerificationAction.LOGIN,
+      }
     );
 
     if (!hasVerification) {
@@ -206,5 +215,14 @@ export class AuthService {
     if (hasVerification.code !== code) {
       throw new UnprocessableEntityException('Verification code wrong');
     }
+
+    const currentTime = new Date(Date.now())
+    if (hasVerification.expired_at < currentTime) {
+      await this.vereficationRepository.updateById(verification_id, VerificationStatus.CANCEL);
+      throw new UnprocessableEntityException('Verification expired at exists');
+    }
+
+
+    return this.vereficationRepository.verifiedAccount(verification_id, hasVerification.account_id);
   }
 }
