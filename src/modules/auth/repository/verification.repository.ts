@@ -3,7 +3,7 @@ import { InjectKnex } from '@shared/utility/knex.inject';
 import { Knex } from 'knex';
 
 export class VerificationRepository {
-  constructor(@InjectKnex() private readonly knex: Knex) { }
+  constructor(@InjectKnex() private readonly knex: Knex) {}
 
   async createVerification(
     account_id: number,
@@ -52,10 +52,10 @@ export class VerificationRepository {
       );
   }
 
-  async updateById(verification_id: number, status: VerificationStatus){
-    return this.knex('verifications').where({id: verification_id}).update({
-      status
-    })
+  async updateById(verification_id: number, status: VerificationStatus) {
+    return this.knex('verifications').where({ id: verification_id }).update({
+      status,
+    });
   }
 
   async verifiedAccount(verification_id: number, account_id: number) {
@@ -63,15 +63,17 @@ export class VerificationRepository {
       return trx('verifications')
         .where({ id: verification_id, status: VerificationStatus.PENDING })
         .update({
-          status: VerificationStatus.VERIFIED
+          status: VerificationStatus.VERIFIED,
         })
         .returning('id')
         .then(async ([res]) => {
-          await trx('accounts').where({ id: account_id }).update({ status: 'active' })
-          return res
+          await trx('accounts')
+            .where({ id: account_id })
+            .update({ status: 'active' });
+          return res;
         })
         .then(trx.commit)
-        .catch(trx.rollback)
-    })
+        .catch(trx.rollback);
+    });
   }
 }
